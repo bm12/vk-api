@@ -65,6 +65,7 @@ module.exports = {
     port: 3000,
     contentBase: path.resolve(__dirname, 'static'),
     watchContentBase: true,
+    historyApiFallback: true,
     hot: isDev,
     open: true,
   },
