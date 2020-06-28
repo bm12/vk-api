@@ -122,10 +122,6 @@ module.exports = {
         use: sassLoader(),
       },
       {
-        test: /\.p?css$/,
-        use: cssLoaders(),
-      },
-      {
         test: /\.(png|jpg|svg|gif)$/,
         use: [fileLoader('images')],
       },
