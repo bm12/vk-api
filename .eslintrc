@@ -1,0 +1,31 @@
+
+{
+  "parser": "babel-eslint",
+  "extends": "airbnb",
+  "plugins": [
+    "react-hooks"
+  ],
+  "rules": {
+    "arrow-body-style": "warn",
+    "semi": "warn",
+    "no-unused-vars": "warn",
+    "comma-dangle": ["warn", "always-multiline"],
+
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "react/jsx-one-expression-per-line": "off",
+    "react/prop-types": "warn",
+    "react/no-danger": "off",
+    "react/destructuring-assignment": "warn",
+
+    "import/no-unresolved": ["error", { "ignore": ["@\/"] }],
+    "import/newline-after-import": "off",
+    "import/prefer-default-export": "off",
+    "import/order": "off"
+  },
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true
+  }
+}
