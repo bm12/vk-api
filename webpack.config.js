@@ -1,4 +1,5 @@
 const path = require('path');
+const dotenv = require('dotenv');
 
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
@@ -45,6 +46,12 @@ const fileLoader = (folder) => {
   });
 };
 
+const envFilePath = isDev
+  ? path.relative(__dirname, '.env.local')
+  : path.relative(__dirname, '.env');
+
+dotenv.config({ path: envFilePath });
+
 module.exports = {
   mode: isDev ? 'development' : 'production',
   entry: {
@@ -81,7 +88,10 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: getFilename('css'),
     }),
-    new webpack.EnvironmentPlugin(['NODE_ENV']),
+    new webpack.EnvironmentPlugin([
+      'NODE_ENV',
+      'ACCESS_TOKEN',
+    ]),
     new BundleAnalyzerPlugin({
       analyzerMode: isProd ? 'static' : 'disabled',
       openAnalyzer: false,
