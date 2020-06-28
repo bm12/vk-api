@@ -8,7 +8,13 @@ const cx = classNames.bind(styles);
 
 const DocsSearchPage = () => (
   <div>
-    Documents search
+    <form>
+      <input type="search" />
+      <button type="submit">Search</button>
+    </form>
+    <div className={cx('result-list')}>
+
+    </div>
   </div>
 );
 
