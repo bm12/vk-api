@@ -11,7 +11,10 @@ const cx = classNames.bind(styles);
 
 const Popup = (props) => {
   const {
-    children, onClose, className, isOpen,
+    children,
+    onClose,
+    className,
+    isOpen,
   } = props;
   const onContentClick = useCallback((e) => {
     e.stopPropagation();
@@ -41,7 +44,10 @@ Popup.defaultProps = {
   isOpen: true,
 };
 Popup.propTypes = {
-
+  children: PropTypes.any,
+  onClose: PropTypes.func,
+  className: PropTypes.any,
+  isOpen: PropTypes.bool,
 };
 
 export default Popup;
