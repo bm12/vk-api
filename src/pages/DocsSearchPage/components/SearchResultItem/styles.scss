@@ -1,0 +1,47 @@
+.result-wrap {
+  display: block;
+  width: 100%;
+  margin-top: 15px;
+
+  color: inherit;
+  text-decoration: inherit;
+}
+
+.result {
+  display: flex;
+  padding: 5px 10px;
+
+  background-color: #f7f8fa;
+
+
+  &-title {
+    margin-left: 10px;
+    font-size: 17px;
+  }
+}
+
+.preview {
+  max-width: 240px;
+  height: auto;
+}
+
+.preview-placeholder {
+  padding: 10px 0;
+  width: 130px;
+  flex-shrink: 0;
+
+  border-radius: 5px;
+  background: #dbdbdb;
+
+  font-size: 21px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.video,
+.img-src {
+  max-width: 100%;
+  height: auto;
+}

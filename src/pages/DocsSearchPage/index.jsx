@@ -4,6 +4,7 @@ import { documnetsService } from '@/services/documentsService';
 
 import classNames from 'classnames/bind';
 import styles from './styles.scss';
+import SearchResultItem from './components/SearchResultItem';
 const cx = classNames.bind(styles);
 
 const DocsSearchPage = () => {
@@ -24,15 +25,7 @@ const DocsSearchPage = () => {
       </form>
       <div className={cx('results')}>
         {results.map((result) => (
-          <div className={cx('result')} key={result.id}>
-            {result.type === 4 ? (
-              <img className={cx('result-img')} src={result.url} alt="" />
-            ) : (
-              <div>
-                other type (ext is: {result.ext})
-              </div>
-            )}
-          </div>
+          <SearchResultItem key={result.id} result={result} />
         ))}
       </div>
     </div>
