@@ -1,0 +1,51 @@
+@import '@/styles/constants.scss';
+
+.popup {
+  display: none;
+  justify-content: center;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+
+  width: 100%;
+  height: 100%;
+  padding: 30px;
+
+  overflow: auto;
+
+  background: rgba(0, 0, 0, .7);
+
+  &.opened {
+    display: flex;
+  }
+
+  &-content {
+    position: relative;
+
+    padding: 45px;
+    max-width: 100%;
+    margin-top: 25px;
+
+    background: #fff;
+    border-radius: 5px;
+
+    @media (min-width: $tablet) {
+      min-width: 640px;
+      margin-top: 45px;
+    }
+  }
+
+  &-close-btn {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+
+    width: 30px;
+    height: 30px;
+
+    font-size: 30px;
+    line-height: 1;
+  }
+}
