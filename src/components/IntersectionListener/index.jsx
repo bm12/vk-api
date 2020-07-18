@@ -3,7 +3,7 @@ import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import classNames from 'classnames/bind';
-import styles from './styles.pcss';
+import styles from './styles.scss';
 const cx = classNames.bind(styles);
 
 const IntersectionListener = ({ onIntersect, onLeave }) => {
