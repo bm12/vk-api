@@ -3,7 +3,8 @@ module.exports = (api) => {
   const isProd = api.env('production');
 
   const plugins = [
-    '@babel/proposal-class-properties',
+    ['@babel/plugin-proposal-decorators', { legacy: true }],
+    ['@babel/proposal-class-properties', { loose: true }],
     '@babel/proposal-object-rest-spread',
   ];
 

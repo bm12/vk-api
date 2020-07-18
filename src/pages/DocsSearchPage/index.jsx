@@ -1,20 +1,19 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 
-import { documnetsService } from '@/services/documentsService';
+import { documentsStore } from '@/stores/Documents';
+import { observer } from 'mobx-react';
+
+import SearchResultItem from './components/SearchResultItem';
 
 import classNames from 'classnames/bind';
 import styles from './styles.scss';
-import SearchResultItem from './components/SearchResultItem';
 const cx = classNames.bind(styles);
 
-const DocsSearchPage = () => {
-  const [results, setResults] = useState([]);
-  const onSubmit = useCallback(async (e) => {
+const DocsSearchPage = observer(() => {
+  const onSubmit = useCallback((e) => {
     e.preventDefault();
     const query = e.target.elements['documents-search'].value;
-    const { items } = await documnetsService.search({ query });
-
-    setResults(items);
+    documentsStore.fetchDocs({ query });
   }, []);
 
   return (
@@ -23,13 +22,16 @@ const DocsSearchPage = () => {
         <input type="search" name="documents-search" />
         <button type="submit">Search</button>
       </form>
+      <div>
+        Кол-во: {documentsStore.count}
+      </div>
       <div className={cx('results')}>
-        {results.map((result) => (
+        {documentsStore.docs.map((result) => (
           <SearchResultItem key={result.id} result={result} />
         ))}
       </div>
     </div>
   );
-};
+});
 
 export default DocsSearchPage;
