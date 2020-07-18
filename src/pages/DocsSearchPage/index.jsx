@@ -7,6 +7,7 @@ import SearchResultItem from './components/SearchResultItem';
 
 import classNames from 'classnames/bind';
 import styles from './styles.scss';
+import IntersectionListener from '@/components/IntersectionListener';
 const cx = classNames.bind(styles);
 
 const DocsSearchPage = observer(() => {
@@ -14,6 +15,10 @@ const DocsSearchPage = observer(() => {
     e.preventDefault();
     const query = e.target.elements['documents-search'].value;
     documentsStore.fetchDocs({ query });
+  }, []);
+
+  const onIntersect = useCallback(() => {
+    documentsStore.fetchNextDocs();
   }, []);
 
   return (
@@ -30,6 +35,9 @@ const DocsSearchPage = observer(() => {
           <SearchResultItem key={result.id} result={result} />
         ))}
       </div>
+      {documentsStore.count > 0 && (
+        <IntersectionListener onIntersect={onIntersect} />
+      )}
     </div>
   );
 });
