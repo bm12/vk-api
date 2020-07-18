@@ -3,15 +3,11 @@ import { observable, action, computed } from 'mobx';
 import { documnetsService } from '@/services/documentsService';
 
 class DocumentsStore {
-  @observable _docs = [];
+  @observable docs = [];
   @observable count = 0;
   _fetchOptions = null;
 
   _isPending = false;
-
-  @computed get docs() {
-    return this._docs;
-  }
 
   @action async fetchDocs(options) {
     this._fetchOptions = { ...options, offset: 0 };
@@ -29,10 +25,10 @@ class DocumentsStore {
     if (this._isPending) return;
     this._isPending = true;
 
-    const { items } = await documnetsService.search({ ...this._fetchOptions, offset: this._docs.length });
+    const { items } = await documnetsService.search({ ...this._fetchOptions, offset: this.docs.length });
     this._isPending = false;
 
-    this._docs.push(...items);
+    this.docs.push(...items);
   }
 }
 
