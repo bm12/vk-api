@@ -8,30 +8,43 @@ class DocumentsStore {
   @observable count = 0;
 
   _fetchOptions = null;
-  _isPending = false;
+  isPending = false;
 
   @action async fetchDocs(options) {
     this._fetchOptions = { ...options, offset: 0 };
-    if (this._isPending) return;
-    this._isPending = true;
+    if (this.isPending) return;
+    this.isPending = true;
 
     const { items, count } = await documnetsService.search(this._fetchOptions);
-    this._isPending = false;
+    this.isPending = false;
 
     this.count = count;
     this.docs = items;
   }
 
   @action async fetchNextDocs() {
-    if (this._isPending) return;
-    this._isPending = true;
+    if (this.isPending) return;
+    this.isPending = true;
 
+    this._fetchOptions = { ...this._fetchOptions, offset: this._fetchOptions.offset + 20 };
     const { items } = await documnetsService.search({ ...this._fetchOptions, offset: this.docs.length });
-    this._isPending = false;
+    this.isPending = false;
 
     const uniqItems = uniqBy([...this.docs, ...items], (doc) => doc.id);
 
     this.docs = uniqItems;
+  }
+
+  getFiltredDocs({
+    types,
+    ext,
+  }) {
+    return this.docs.filter((doc) => {
+      if (types && !types.includes(doc.type)) return false;
+      if (ext && ext !== doc.ext) return false;
+
+      return true;
+    });
   }
 }
 

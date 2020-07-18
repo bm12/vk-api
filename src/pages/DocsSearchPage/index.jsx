@@ -14,10 +14,19 @@ const cx = classNames.bind(styles);
 
 const DocsSearchPage = observer(() => {
   const [previewDoc, setPreviewDoc] = useState(null);
+  const [docsTypes, setDocsTypes] = useState();
   const onSubmit = useCallback((e) => {
     e.preventDefault();
     const query = e.target.elements['documents-search'].value;
     documentsStore.fetchDocs({ query });
+
+    const type = parseInt(e.target.elements.type.value, 10);
+
+    if (Number.isNaN(type)) {
+      setDocsTypes();
+    } else {
+      setDocsTypes([type]);
+    }
   }, []);
 
   const onIntersect = useCallback(() => {
@@ -29,17 +38,43 @@ const DocsSearchPage = observer(() => {
   };
   const onPopupClose = () => setPreviewDoc(null);
 
+  console.log(documentsStore.docs);
+  const results = documentsStore.getFiltredDocs({ types: docsTypes });
+
   return (
     <div>
       <form onSubmit={onSubmit}>
-        <input type="search" name="documents-search" />
-        <button type="submit">Search</button>
+        <div>
+          <input type="search" name="documents-search" />
+          <button type="submit">Search</button>
+        </div>
+        <div>
+          <p>
+            Фильтры (применяются после запроса):
+          </p>
+          <label htmlFor="documentTypeSelect">
+            Тип документа:
+            <select name="type" id="documentTypeSelect">
+              <option value="">Любой</option>
+              <option value="1">текстовые документы</option>
+              <option value="2">архивы</option>
+              <option value="3">gif</option>
+              <option value="4">изображения</option>
+              <option value="5">аудио</option>
+              <option value="6">видео</option>
+              <option value="7">электронные книги</option>
+              <option value="8">остальные</option>
+            </select>
+          </label>
+        </div>
       </form>
-      <div>
-        Кол-во: {documentsStore.count}
-      </div>
+      {documentsStore.count > 0 && !docsTypes && (
+        <div>
+          Кол-во: {documentsStore.count}
+        </div>
+      )}
       <div className={cx('results')}>
-        {documentsStore.docs.map((result) => (
+        {results.map((result) => (
           <SearchResultItem
             key={result.id}
             result={result}
@@ -48,12 +83,12 @@ const DocsSearchPage = observer(() => {
         ))}
       </div>
       {documentsStore.count > 0 && (
-        <>
-          <IntersectionListener onIntersect={onIntersect} />
-          <div className={cx('preloader-wrap')}>
-            <Preloader />
-          </div>
-        </>
+        <IntersectionListener onIntersect={onIntersect} />
+      )}
+      {documentsStore.isPending && (
+        <div className={cx('preloader-wrap')}>
+          <Preloader />
+        </div>
       )}
       {previewDoc && (
         <PreviewDocPopup onClose={onPopupClose} doc={previewDoc} />
