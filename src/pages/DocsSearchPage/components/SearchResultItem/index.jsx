@@ -1,72 +1,51 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import PropTypes from 'prop-types';
 
 import DefaultButton from '@/components/DefaultButton';
-import Popup from '@/components/Popup';
 
 import classNames from 'classnames/bind';
 import styles from './styles.scss';
 const cx = classNames.bind(styles);
 
-const SearchResultItem = ({ result }) => {
+const SearchResultItem = ({ result, onClick: onClickProp }) => {
   const {
+    id,
     url,
     ext,
     preview,
     title,
   } = result;
-  const [showPopup, setShowPopup] = useState(false);
 
   const WrapComp = preview ? DefaultButton : 'a';
-  const onClick = () => setShowPopup(true);
-  const onPopupClose = () => setShowPopup(false);
+  const onClick = () => onClickProp(id);
 
   return (
-    <>
-      <WrapComp
-        href={preview ? undefined : url}
-        onClick={preview ? onClick : undefined}
-        className={cx('result-wrap')}
-      >
-        <div className={cx('result')}>
-          {preview ? (
-            <img className={cx('preview')} src={preview.photo.sizes[0].src} alt="" />
-          ) : (
-            <div className={cx('preview-placeholder')}>
-              {ext}
-            </div>
-          )}
-          <div className={cx('result-title')}>
-            {title}
+    <WrapComp
+      href={preview ? undefined : url}
+      onClick={preview ? onClick : undefined}
+      className={cx('result-wrap')}
+    >
+      <div className={cx('result')}>
+        {preview ? (
+          <img className={cx('preview')} src={preview.photo.sizes[0].src} alt="" />
+        ) : (
+          <div className={cx('preview-placeholder')}>
+            {ext}
           </div>
+        )}
+        <div className={cx('result-title')}>
+          {title}
         </div>
-      </WrapComp>
-      {showPopup && (
-        <Popup onClose={onPopupClose}>
-          {preview.video ? (
-            <video
-              className={cx('video')}
-              src={preview.video.src}
-              muted
-              controls
-              autoPlay
-            />
-          ) : (
-            <img
-              src={url}
-              className={cx('img-src')}
-              alt={title}
-            />
-          )}
-        </Popup>
-      )}
-    </>
+      </div>
+    </WrapComp>
   );
 };
 
 SearchResultItem.propTypes = {
+  onClick: PropTypes.func,
   result: PropTypes.shape({
+    id: PropTypes.number,
     url: PropTypes.string,
     ext: PropTypes.string,
     preview: PropTypes.shape({

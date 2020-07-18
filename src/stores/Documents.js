@@ -1,12 +1,13 @@
 /* eslint-disable no-underscore-dangle */
 import { observable, action } from 'mobx';
 import { documnetsService } from '@/services/documentsService';
+import { uniqBy } from 'lodash';
 
 class DocumentsStore {
-  @observable docs = [];
+  @observable.shallow docs = [];
   @observable count = 0;
-  _fetchOptions = null;
 
+  _fetchOptions = null;
   _isPending = false;
 
   @action async fetchDocs(options) {
@@ -28,7 +29,9 @@ class DocumentsStore {
     const { items } = await documnetsService.search({ ...this._fetchOptions, offset: this.docs.length });
     this._isPending = false;
 
-    this.docs.push(...items);
+    const uniqItems = uniqBy([...this.docs, ...items], (doc) => doc.id);
+
+    this.docs = uniqItems;
   }
 }
 
