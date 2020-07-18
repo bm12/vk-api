@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useCallback, useEffect } from 'react';
 
@@ -7,6 +8,7 @@ import DefaultButton from '../DefaultButton';
 
 import classNames from 'classnames/bind';
 import styles from './styles.scss';
+import { isEscapePressed } from '@/utils/eventKeys';
 const cx = classNames.bind(styles);
 
 const Popup = (props) => {
@@ -16,18 +18,29 @@ const Popup = (props) => {
     className,
     isOpen,
   } = props;
+
   const onContentClick = useCallback((e) => {
     e.stopPropagation();
   }, []);
 
   useEffect(() => {
-    if (isOpen) document.body.classList.add('fix-scroll');
+    const handleEscapeKey = (e) => {
+      if (isEscapePressed(e)) onClose();
+    };
 
-    return () => document.body.classList.remove('fix-scroll');
-  }, [isOpen]);
+    if (isOpen) {
+      document.body.classList.add('fix-scroll');
+      document.addEventListener('keydown', handleEscapeKey);
+    }
+
+    return () => {
+      document.body.classList.remove('fix-scroll');
+      document.removeEventListener('keydown', handleEscapeKey);
+    };
+  }, [isOpen, onClose]);
 
   return (
-    <DefaultButton onClick={onClose} className={cx('popup', { opened: isOpen })}>
+    <div onClick={onClose} className={cx('popup', { opened: isOpen })}>
       <div onClick={onContentClick} className={cx('popup-content', className)}>
         <DefaultButton onClick={onClose} className={cx('popup-close-btn')}>
           <span dangerouslySetInnerHTML={{ __html: '&times;' }} />
@@ -36,7 +49,7 @@ const Popup = (props) => {
           {children}
         </div>
       </div>
-    </DefaultButton>
+    </div>
   );
 };
 

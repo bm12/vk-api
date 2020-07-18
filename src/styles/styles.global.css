@@ -1,3 +1,7 @@
 .fix-scroll {
   overflow: hidden;
 }
+
+* {
+  box-sizing: border-box;
+}

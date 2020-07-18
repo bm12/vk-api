@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import { observable, action, computed } from 'mobx';
+import { observable, action } from 'mobx';
 import { documnetsService } from '@/services/documentsService';
 
 class DocumentsStore {
@@ -18,7 +18,7 @@ class DocumentsStore {
     this._isPending = false;
 
     this.count = count;
-    this._docs = items;
+    this.docs = items;
   }
 
   @action async fetchNextDocs() {
