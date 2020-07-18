@@ -3,11 +3,12 @@ import React, { useCallback } from 'react';
 import { documentsStore } from '@/stores/Documents';
 import { observer } from 'mobx-react';
 
+import IntersectionListener from '@/components/IntersectionListener';
+import Preloader from '@/components/Preloader';
 import SearchResultItem from './components/SearchResultItem';
 
 import classNames from 'classnames/bind';
 import styles from './styles.scss';
-import IntersectionListener from '@/components/IntersectionListener';
 const cx = classNames.bind(styles);
 
 const DocsSearchPage = observer(() => {
@@ -36,7 +37,12 @@ const DocsSearchPage = observer(() => {
         ))}
       </div>
       {documentsStore.count > 0 && (
-        <IntersectionListener onIntersect={onIntersect} />
+        <>
+          <IntersectionListener onIntersect={onIntersect} />
+          <div className={cx('preloader-wrap')}>
+            <Preloader />
+          </div>
+        </>
       )}
     </div>
   );
