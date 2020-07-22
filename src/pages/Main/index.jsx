@@ -6,7 +6,7 @@ import {
   Link,
 } from 'react-router-dom';
 
-import { routes } from '@/utils/routerHelper';
+import { routes } from '@/modules/routes';
 
 import DocsSearchPage from '@/pages/DocsSearchPage';
 import PrivateRoute from '@/components/PrivateRoute';
