@@ -61,6 +61,8 @@ export const getAuthData = () => {
   }
 };
 
+export const getAccessToken = () => getAuthData().accessToken;
+
 export const getAuthStatus = () => {
   const authData = getAuthData();
 
