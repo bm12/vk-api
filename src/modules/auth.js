@@ -10,13 +10,11 @@ const urlParamsKeys = {
   userId: 'user_id',
 };
 
-const createAuthDataObj = (accessToken, expiresIn, timestamp = Date.now()) => {
-  return {
-    accessToken,
-    expiresIn,
-    timestamp,
-  };
-};
+const createAuthDataObj = (accessToken, expiresIn, timestamp = Date.now()) => ({
+  accessToken,
+  expiresIn,
+  timestamp,
+});
 
 const checkExpire = ({ expiresIn, timestamp }) => {
   if (expiresIn === 0) return true;
