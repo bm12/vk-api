@@ -38,7 +38,6 @@ const DocsSearchPage = observer(() => {
   };
   const onPopupClose = () => setPreviewDoc(null);
 
-  console.log(documentsStore.docs);
   const results = documentsStore.getFiltredDocs({ types: docsTypes });
 
   return (
