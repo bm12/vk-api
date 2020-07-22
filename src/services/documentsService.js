@@ -1,6 +1,7 @@
 import { requestVkApi } from './vkApiBaseService';
+import { vkApiScopes } from './constants';
 
-const methodPefix = 'docs.';
+const methodPefix = `${vkApiScopes.docs}.`;
 
 export const documnetsService = {
   search: ({

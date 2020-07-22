@@ -9,6 +9,7 @@ import {
 import { routes } from '@/utils/routerHelper';
 
 import DocsSearchPage from '@/pages/DocsSearchPage';
+import PrivateRoute from '@/components/PrivateRoute';
 
 import classNames from 'classnames/bind';
 import styles from './styles.scss';
@@ -33,9 +34,9 @@ const Main = () => (
       </nav>
 
       <Switch>
-        <Route path={routes.docsPage}>
+        <PrivateRoute path={routes.docsPage}>
           <DocsSearchPage />
-        </Route>
+        </PrivateRoute>
         <Route path="/">
           <h2>
             Choose page

@@ -91,6 +91,7 @@ module.exports = {
     new webpack.EnvironmentPlugin([
       'NODE_ENV',
       'ACCESS_TOKEN',
+      'CLIENT_ID',
     ]),
     new BundleAnalyzerPlugin({
       analyzerMode: isProd ? 'static' : 'disabled',
