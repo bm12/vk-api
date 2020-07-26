@@ -17,16 +17,15 @@ const DocsSearchPage = observer(() => {
   const [docsTypes, setDocsTypes] = useState();
   const onSubmit = useCallback((e) => {
     e.preventDefault();
-    const query = e.target.elements['documents-search'].value;
+    const formElements = e.target.elements;
+    const query = formElements['documents-search'].value;
     documentsStore.fetchDocs({ query });
 
-    const type = parseInt(e.target.elements.type.value, 10);
+    const types = [...formElements['file-type']]
+      .filter((checkbox) => checkbox.checked && !Number.isNaN(parseInt(checkbox.value, 10)))
+      .map((checkbox) => Number(checkbox.value));
 
-    if (Number.isNaN(type)) {
-      setDocsTypes();
-    } else {
-      setDocsTypes([type]);
-    }
+    setDocsTypes(types.length ? types : undefined);
   }, []);
 
   const onIntersect = useCallback(() => {
@@ -51,20 +50,41 @@ const DocsSearchPage = observer(() => {
           <p>
             Фильтры (применяются после запроса):
           </p>
-          <label htmlFor="documentTypeSelect">
+          <div>
             Тип документа:
-            <select name="type" id="documentTypeSelect">
-              <option value="">Любой</option>
-              <option value="1">текстовые документы</option>
-              <option value="2">архивы</option>
-              <option value="3">gif</option>
-              <option value="4">изображения</option>
-              <option value="5">аудио</option>
-              <option value="6">видео</option>
-              <option value="7">электронные книги</option>
-              <option value="8">остальные</option>
-            </select>
-          </label>
+            <label className={cx('file-type-label')} htmlFor="file-type-1">
+              <input type="checkbox" name="file-type" id="file-type-1" value="1" />
+              текстовые документы
+            </label>
+            <label className={cx('file-type-label')} htmlFor="file-type-2">
+              <input type="checkbox" name="file-type" id="file-type-2" value="2" />
+              архивы
+            </label>
+            <label className={cx('file-type-label')} htmlFor="file-type-3">
+              <input type="checkbox" name="file-type" id="file-type-3" value="3" />
+              gif
+            </label>
+            <label className={cx('file-type-label')} htmlFor="file-type-4">
+              <input type="checkbox" name="file-type" id="file-type-4" value="4" />
+              изображения
+            </label>
+            <label className={cx('file-type-label')} htmlFor="file-type-5">
+              <input type="checkbox" name="file-type" id="file-type-5" value="5" />
+              аудио
+            </label>
+            <label className={cx('file-type-label')} htmlFor="file-type-6">
+              <input type="checkbox" name="file-type" id="file-type-6" value="6" />
+              видео
+            </label>
+            <label className={cx('file-type-label')} htmlFor="file-type-7">
+              <input type="checkbox" name="file-type" id="file-type-7" value="7" />
+              электронные книги
+            </label>
+            <label className={cx('file-type-label')} htmlFor="file-type-8">
+              <input type="checkbox" name="file-type" id="file-type-8" value="8" />
+              остальные
+            </label>
+          </div>
         </div>
       </form>
       {documentsStore.count > 0 && !docsTypes && (
