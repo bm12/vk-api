@@ -14,21 +14,19 @@ const cx = classNames.bind(styles);
 
 const DocsSearchPage = observer(() => {
   const [previewDoc, setPreviewDoc] = useState(null);
-  const [docsTypes, setDocsTypes] = useState();
   const [isEndOfList, setIsEndOfList] = useState(false);
   const onSubmit = useCallback((e) => {
     e.preventDefault();
     const formElements = e.target.elements;
     const query = formElements['documents-search'].value;
-    documentsStore.fetchDocs({ query });
-
     const types = [...formElements['file-type']]
       .filter((checkbox) => checkbox.checked && !Number.isNaN(parseInt(checkbox.value, 10)))
       .map((checkbox) => Number(checkbox.value));
 
-    setDocsTypes(types.length ? types : undefined);
+    documentsStore.fetchDocs({ query }, { types: types.length ? types : undefined });
   }, []);
-  const results = documentsStore.getFiltredDocs({ types: docsTypes });
+  const results = documentsStore.filtredDocs;
+  const isHasFiltredDocs = documentsStore.docs.length !== results.length;
 
   useEffect(() => {
     if (isEndOfList && !documentsStore.isPending) {
@@ -93,7 +91,7 @@ const DocsSearchPage = observer(() => {
           </div>
         </div>
       </form>
-      {documentsStore.count > 0 && !docsTypes && (
+      {documentsStore.count > 0 && !isHasFiltredDocs && (
         <div>
           Кол-во: {documentsStore.count}
         </div>

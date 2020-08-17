@@ -9,9 +9,11 @@ class DocumentsStore {
   @observable isPending = false;
 
   _fetchOptions = null;
+  _filterOptions = {};
 
-  @action async fetchDocs(options) {
+  @action async fetchDocs(options, filters) {
     this._fetchOptions = { ...options, offset: 0 };
+    this._filterOptions = filters;
     if (this.isPending) return;
     this.isPending = true;
 
@@ -37,10 +39,8 @@ class DocumentsStore {
     });
   }
 
-  getFiltredDocs({
-    types,
-    ext,
-  }) {
+  get filtredDocs() {
+    const { types, ext } = this._filterOptions;
     return this.docs.filter((doc) => {
       if (types && !types.includes(doc.type)) return false;
       if (ext && ext !== doc.ext) return false;
