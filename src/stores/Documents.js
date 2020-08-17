@@ -1,14 +1,14 @@
 /* eslint-disable no-underscore-dangle */
-import { observable, action } from 'mobx';
+import { observable, action, runInAction } from 'mobx';
 import { documnetsService } from '@/services/documentsService';
 import { uniqBy } from 'lodash';
 
 class DocumentsStore {
   @observable.shallow docs = [];
   @observable count = 0;
+  @observable isPending = false;
 
   _fetchOptions = null;
-  isPending = false;
 
   @action async fetchDocs(options) {
     this._fetchOptions = { ...options, offset: 0 };
@@ -16,10 +16,11 @@ class DocumentsStore {
     this.isPending = true;
 
     const { items, count } = await documnetsService.search(this._fetchOptions);
-    this.isPending = false;
-
-    this.count = count;
-    this.docs = items;
+    runInAction(() => {
+      this.isPending = false;
+      this.count = count;
+      this.docs = items;
+    });
   }
 
   @action async fetchNextDocs() {
@@ -28,11 +29,12 @@ class DocumentsStore {
 
     this._fetchOptions = { ...this._fetchOptions, offset: this._fetchOptions.offset + 20 };
     const { items } = await documnetsService.search({ ...this._fetchOptions, offset: this.docs.length });
-    this.isPending = false;
 
     const uniqItems = uniqBy([...this.docs, ...items], (doc) => doc.id);
-
-    this.docs = uniqItems;
+    runInAction(() => {
+      this.isPending = false;
+      this.docs = uniqItems;
+    });
   }
 
   getFiltredDocs({
