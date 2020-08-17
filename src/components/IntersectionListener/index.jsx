@@ -6,17 +6,16 @@ import classNames from 'classnames/bind';
 import styles from './styles.scss';
 const cx = classNames.bind(styles);
 
-const IntersectionListener = ({ onIntersect, onLeave }) => {
+const IntersectionListener = ({ onChange }) => {
   const elemRef = useRef(null);
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
-      if (entries.find((e) => e.isIntersecting)) onIntersect();
-      if (entries.find((e) => !e.isIntersecting)) onLeave();
+      entries.forEach((e) => onChange(e.isIntersecting));
     });
 
     observer.observe(elemRef.current);
     return () => observer.disconnect();
-  }, [onIntersect, onLeave]);
+  }, [onChange]);
 
   return (
     <div ref={elemRef} className={cx('visuallyHidden')} />
@@ -24,12 +23,10 @@ const IntersectionListener = ({ onIntersect, onLeave }) => {
 };
 
 IntersectionListener.defaultProps = {
-  onIntersect: () => {},
-  onLeave: () => {},
+  onChange: () => {},
 };
 IntersectionListener.propTypes = {
-  onIntersect: PropTypes.func,
-  onLeave: PropTypes.func,
+  onChange: PropTypes.func,
 };
 
 export default IntersectionListener;

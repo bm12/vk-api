@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 
 import { documentsStore } from '@/stores/Documents';
 import { observer } from 'mobx-react';
@@ -15,6 +15,7 @@ const cx = classNames.bind(styles);
 const DocsSearchPage = observer(() => {
   const [previewDoc, setPreviewDoc] = useState(null);
   const [docsTypes, setDocsTypes] = useState();
+  const [isEndOfList, setIsEndOfList] = useState(false);
   const onSubmit = useCallback((e) => {
     e.preventDefault();
     const formElements = e.target.elements;
@@ -27,17 +28,22 @@ const DocsSearchPage = observer(() => {
 
     setDocsTypes(types.length ? types : undefined);
   }, []);
+  const results = documentsStore.getFiltredDocs({ types: docsTypes });
 
-  const onIntersect = useCallback(() => {
-    documentsStore.fetchNextDocs();
+  useEffect(() => {
+    if (isEndOfList && !documentsStore.isPending) {
+      documentsStore.fetchNextDocs();
+    }
+  }, [isEndOfList, documentsStore.docs.length]);
+
+  const onChange = useCallback((isVisible) => {
+    setIsEndOfList(isVisible);
   }, []);
   const onPopupOpen = (id) => {
     const doc = documentsStore.docs.find((d) => d.id === id);
     setPreviewDoc(doc);
   };
   const onPopupClose = () => setPreviewDoc(null);
-
-  const results = documentsStore.getFiltredDocs({ types: docsTypes });
 
   return (
     <div>
@@ -102,7 +108,7 @@ const DocsSearchPage = observer(() => {
         ))}
       </div>
       {documentsStore.count > 0 && (
-        <IntersectionListener onIntersect={onIntersect} />
+        <IntersectionListener onChange={onChange} />
       )}
       {documentsStore.isPending && (
         <div className={cx('preloader-wrap')}>
