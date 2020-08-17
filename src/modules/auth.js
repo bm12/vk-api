@@ -16,7 +16,7 @@ const createAuthDataObj = (accessToken, expiresIn, timestamp = Date.now()) => ({
   timestamp,
 });
 
-const checkExpire = ({ expiresIn, timestamp }) => {
+const isExpirationValid = ({ expiresIn, timestamp }) => {
   if (expiresIn === 0) return true;
   if (!timestamp) return false;
 
@@ -40,23 +40,12 @@ export const authStatuses = {
 
 export const getAuthData = () => {
   let authData = getFromLocalStorage(AUTH_DATA_KEY);
-
-  if (authData) {
-    const isValidToken = checkExpire(authData);
-
-    if (isValidToken) return authData;
+  if (!authData) {
+    authData = getAuthFromUrl();
+    setToLocalStorage(AUTH_DATA_KEY, authData);
   }
 
-  authData = getAuthFromUrl();
-
-  if (authData) {
-    const isValidToken = checkExpire(authData);
-
-    if (isValidToken) {
-      setToLocalStorage(AUTH_DATA_KEY, authData);
-      return authData;
-    }
-  }
+  if (authData && isExpirationValid(authData)) return authData;
 };
 
 export const getAccessToken = () => getAuthData().accessToken;
