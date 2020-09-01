@@ -40,12 +40,13 @@ export const authStatuses = {
 
 export const getAuthData = () => {
   let authData = getFromLocalStorage(AUTH_DATA_KEY);
-  if (!authData) {
-    authData = getAuthFromUrl();
-    setToLocalStorage(AUTH_DATA_KEY, authData);
-  }
-
   if (authData && isExpirationValid(authData)) return authData;
+
+  authData = getAuthFromUrl();
+  if (authData && isExpirationValid(authData)) {
+    setToLocalStorage(AUTH_DATA_KEY, authData);
+    return authData;
+  }
 };
 
 export const getAccessToken = () => getAuthData().accessToken;
