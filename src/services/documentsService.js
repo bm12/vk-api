@@ -21,5 +21,5 @@ export const documnetsService = {
       count,
     },
   })
-    .then(({ data }) => data.response),
+    .then((data) => data.response),
 };
