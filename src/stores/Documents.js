@@ -1,5 +1,7 @@
 /* eslint-disable no-underscore-dangle */
-import { observable, action, runInAction } from 'mobx';
+import {
+  observable, action, runInAction, computed,
+} from 'mobx';
 import { documnetsService } from '@/services/documentsService';
 import { uniqBy } from 'lodash';
 
@@ -39,7 +41,7 @@ class DocumentsStore {
     });
   }
 
-  get filtredDocs() {
+  @computed get filtredDocs() {
     const { types, ext } = this._filterOptions;
     return this.docs.filter((doc) => {
       if (types && !types.includes(doc.type)) return false;
