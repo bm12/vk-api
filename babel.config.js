@@ -10,6 +10,7 @@ module.exports = (api) => {
 
   if (isProd) {
     plugins.push('@babel/plugin-transform-runtime');
+    plugins.push(['babel-plugin-transform-react-remove-prop-types', { removeImport: true }]);
   }
 
   return {
